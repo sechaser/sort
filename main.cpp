@@ -7,7 +7,6 @@ using namespace std;
 void simpleSelectionSort(int a[], int n)
 {
     int temp;
-    int index;
 
     for(int i = 0; i < (n-1); ++ i)
     {
