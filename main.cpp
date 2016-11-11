@@ -1,69 +1,55 @@
 #include <iostream>
+#include <vector>
+#include <iomanip>
 
-using namespace std;
-
-void print(int a[], int n)
+void heapAdjust(std::vector<int>& nums, int father, int sz)
 {
-    for(int i = 0; i != n; ++ i)
-        cout<<a[i]<<" ";
+    int child = 2 * father + 1;
+    int temp = nums[father];
 
-    cout<<endl;
-}
-
-void heapAdjust(int H[], int s, int length)
-{
-    int tmp   = H[s];           //node that need to be adjusted
-    int child = 2 * s + 1;      //the left child of s
-
-    while(child < length)
+    while(child < sz)
     {
-        //child is the max of left child and right child
-        if(((child + 1) < length) && (H[child] < H[child+1]))
+        if(child + 1 < sz && nums[child + 1] < nums[child])
             ++ child;
 
-        if(H[s] < H[child])
-        {
-            H[s] = H[child];
-            s    = child;
-            child= 2 * s + 1;
-        }
-
-        else
+        if(nums[child] > temp)
             break;
 
-        H[s] = tmp;
+        nums[father] = nums[child];
+        father = child;
+        child = 2 * child + 1;
     }
 
-    print(H, length);
+    nums[father] = temp;
 }
 
-void buildingHeap(int H[], int length)
+
+void buildHeap(std::vector<int>& nums, int sz)
 {
-    for(int i = (length -1)/2; i >= 0; -- i)
-        heapAdjust(H, i, length);
+    for(int i = sz/2 - 1; i >= 0; -- i)
+        heapAdjust(nums, i, sz);
 }
 
-void heapSort(int H[], int length)
-{
-    buildingHeap(H, length);
 
-    for(int i = length - 1; i > 0; -- i)
+void heapSort(std::vector<int>& nums, int sz)
+{
+    buildHeap(nums, sz);
+
+    for(int i = sz - 1; i >= 0; -- i)
     {
-        int temp;
-        temp = H[i];
-        H[i] = H[0];
-        H[0] = temp;
+        std::cout<<std::setw(4)<<nums[0];
+        nums[0] = nums[i];
 
-        heapAdjust(H, 0, i);
+        heapAdjust(nums, 0, i);
     }
+    std::cout<<std::endl;
 }
+
 
 int main()
 {
-    int H[10] = {3, 1, 5, 7, 2, 4, 9, 6, 10, 8};
-    print(H, 10);
-    heapSort(H, 10);
-    print(H, 10);
+    std::vector<int> nums{3, 9 , 1, 4, 5, 0, 15};
+    heapSort(nums, nums.size());
 
     return 0;
 }
