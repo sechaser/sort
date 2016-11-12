@@ -1,41 +1,42 @@
 #include <iostream>
+#include <vector>
+#include <iomanip>
 
-#define N 11
-using namespace std;
 
-
-void ShellSort(int a[], int n)
+void shellSort(std::vector<int>& nums, int sz)
 {
-    int step = n/2;
+    int step = sz / 2;
+    int temp;
+    int prev;
+
     while(step >= 1)
     {
-        for(int i = step; i < n; ++ i)
+        for(int beg = step; beg < sz; ++ beg)
         {
-            int j = i - step;
-            int x = a[i];
+            temp = nums[beg];
+            prev = beg - step;
 
-            while((j >= 0) && (a[j] > x))
+            while(prev >= 0 && nums[prev] > temp)
             {
-                a[j + step] = a[j];
-                j = j - step;
+                nums[prev + step] = nums[prev];
+                prev = prev - step;
             }
 
-            a[j+step] = x;
-
-            for(int k = 0; k < n; ++ k)
-                std::cout<<a[k]<<" ";
-            std::cout<<std::endl;
+            nums[prev + step] = temp;
         }
 
-        step = step/2;
+        for(std::vector<int>::size_type i = 0; i != nums.size(); ++ i)
+            std::cout<<std::setw(4)<<nums[i];
+        std::cout<<std::endl;
+
+        step = step / 2;
     }
 }
 
 int main()
 {
-    int a[N] = {2, 9, 10, 7, 6, 4, 8, 11, 0, 1, 5};
-
-    ShellSort(a, N);
+    std::vector<int> nums{2, 9, 10, 7, 6, 4, 8, 11, 0, 1, 5};
+    shellSort(nums, nums.size());
 
     return 0;
 }
