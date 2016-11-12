@@ -1,15 +1,8 @@
 #include <iostream>
+#include <vector>
+#include <iomanip>
 
-#define N 10
-
-void print(int a[], int n)
-{
-    for(int i = 0; i < n; ++ i)
-        std::cout<<a[i]<<" ";
-    std::cout<<std::endl;
-}
-
-void mergeArray(int a[], int first, int mid, int last, int temp[])
+void mergeArray(std::vector<int>& nums, int first, int mid, int last, std::vector<int>& temp)
 {
     int i = first, j = mid + 1;
     int m = mid,   n = last;
@@ -17,59 +10,47 @@ void mergeArray(int a[], int first, int mid, int last, int temp[])
 
     while((i <= m) && (j <= n))
     {
-        if(a[i] <= a[j])
-        {
-            temp[k] = a[i];
-            ++ i;
-            ++ k;
-        }
+        if(nums[i] <= nums[j])
+            temp[k++] = nums[i++];
         else
-        {
-            temp[k] = a[j];
-            ++ j;
-            ++ k;
-        }
+            temp[k++] = nums[j++];
     }
 
     while(i <= m)
-    {
-        temp[k] = a[i];
-        ++ i;
-        ++ k;
-    }
+        temp[k++] = nums[i++];
 
     while(j <= n)
-    {
-        temp[k] = a[j];
-        ++ j;
-        ++ k;
-    }
+        temp[k++] = nums[j++];
 
     for(i = 0; i < k; ++ i)
-        a[first + i] = temp[i];
+        nums[first + i] = temp[i];
 
-    print(a, N);
+
+    for(std::vector<int>::size_type t = 0; t != nums.size(); ++ t)
+        std::cout<<std::setw(4)<<nums[t];
+    std::cout<<std::endl;
+
 }
 
-void mergeSort(int a[], int first, int last, int temp[])
+void mergeSort(std::vector<int>& nums, int low, int high, std::vector<int>& temp)
 {
-    if(first < last)
+    if(low < high)
     {
-        int mid = (first + last)/2;
-        mergeSort(a, 0, mid, temp);          //左边有序
-        mergeSort(a, mid + 1, last, temp);   //右边有序
+        int mid = (low + high)/2;
+        mergeSort(nums, low, mid, temp);
+        mergeSort(nums, mid + 1, high, temp);
 
-        mergeArray(a, first, mid, last, temp);
+        mergeArray(nums, low, mid, high, temp);
     }
 }
 
 
 int main()
 {
-    int a[N] = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
-    int b[N];
+    std::vector<int> nums{10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+    std::vector<int> temp(nums.size(), 0);
 
-    mergeSort(a, 0, N-1, b);
+    mergeSort(nums, 0, nums.size() - 1, temp);
 
     return 0;
 }
